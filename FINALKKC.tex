@@ -1,0 +1,561 @@
+\documentclass[12pt,oneside,reqno]{amsart}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{setspace}
+\onehalfspacing
+% The package can be used temporarily only to show the cross-reference labels
+%\usepackage{showkeys} 
+% This paragraph resets the sizes of the printed area of the page
+\hoffset -1.5cm
+\voffset -1cm
+\textwidth 15.5truecm
+\textheight 22.5truecm
+% This paragraph defines the macros for theorems and the like
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+% This paragraph defines the macros for definitions and the like
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{remarks}[theorem]{Remarks}
+\numberwithin{equation}{theorem}
+% The next paragraph defines macros for special roman letters to be used
+\newcommand{\CC}{{\mathbb C}} % the set of complex numbers
+\newcommand{\NN}{{\mathbb N}} % the set of natural numbers
+\newcommand{\QQ}{{\mathbb Q}} % the set of rational numbers
+\newcommand{\ZZ}{{\mathbb Z}} % the set of integer numbers
+\newcommand{\DD}{{\mathbb D}} % the unit disk
+\newcommand{\RR}{{\mathbb R}} % the set of real numbers
+\newcommand{\TT}{{\mathbb T}} % the unit circle (the one dimensional torus)
+\newcommand{\PP}{{\mathbb P}}% the probability measure
+\newcommand{\EE}{{\mathbb E}} % the expectation
+% The next paragraph defines macros for caligraphic letters
+\newcommand{\cA}{{\mathcal A}}
+\newcommand{\cB}{{\mathcal B}}
+\newcommand{\cC}{{\mathcal C}}
+\newcommand{\cD}{{\mathcal D}}
+\newcommand{\cE}{{\mathcal E}}
+\newcommand{\cF}{{\mathcal F}}
+\newcommand{\cG}{{\mathcal G}}
+\newcommand{\cH}{{\mathcal H}}
+\newcommand{\cJ}{{\mathcal J}}
+\newcommand{\cK}{{\mathcal K}}
+\newcommand{\cL}{{\mathcal L}}
+\newcommand{\cM}{{\mathcal M}}
+\newcommand{\cN}{{\mathcal N}}
+\newcommand{\cP}{{\mathcal P}}
+\newcommand{\cQ}{{\mathcal Q}}
+\newcommand{\cR}{{\mathcal R}}
+\newcommand{\cS}{{\mathcal S}}
+\newcommand{\cT}{{\mathcal T}}
+\newcommand{\cU}{{\mathcal U}}
+\newcommand{\cV}{{\mathcal V}}
+\newcommand{\cW}{{\mathcal W}}
+\newcommand{\cZ}{{\mathcal Z}}
+\newcommand{\sG}{{\mathscr{G}}}
+% The next paragraph defines special macros
+\newcommand{\iac}{\mathrm{i}} % the imaginary i
+\newcommand{\de}{\operatorname{d}} % the differential
+\newcommand{\deriv}{\operatorname{D}}
+% Authors macros for complicated commands can be used, but be careful!
+\providecommand{\AMS}{$\mathcal{A}$\kern-.1667em%
+\lower.25em\hbox{$\mathcal{M}$}\kern-.125em$\mathcal{S}$}
+% Use of macros should confine the general rules for AMS-LaTeX. It is
+% recommended to use \newcommand and \renewcommand instead of the TeX
+% primitive \def
+% Next is an example of macro I designed for numbering items that are
+% different than the available ``itemize, description'' environments.
+% You can use it if you want!
+\newcommand{\nr}[1]{\vspace{0.1ex}\noindent\hspace*{12mm}\llap{\textup{(#1)}}}
+% Topmatter produces the title, author, abstract, etc.
+\begin{document}
+\title[]{Park and Pham's Proof of the Kahn-Kalai Conjecture} 
+
+\author{Hafsah Aamer \\
+Math 490, Fall 2022}
+
+
+
+
+
+\begin{abstract} This paper aims to expound the argument used in Pham and Park's proof of the Kahn-Kalai's ``expectation-threshold" conjecture. Before doing so, we provide necessary background and results needed to understand the statement of the theorem, as well as the proof thereof.
+\end{abstract}
+\maketitle
+
+
+% Body of the project
+
+
+\section{Preliminaries}
+
+ We have used \cite{mbk}, \cite{sbk}, \cite{tf}, and \cite{okkc} to describe preliminary definitions and results.
+\newline 
+\\
+We start with a brief introduction to random graphs. The foundations of the theory of random graphs were laid down by Erd\H{o}s and R\'{e}nyi in their seminal paper \cite{er}, thus initiating the study of ``typical" properties of graphs equipped with a certain probability distribution. We describe the the most encountered probability spaces (models) of random graphs. First, we give the following preliminary definitions: 
+
+\begin{definition}
+A \emph{probability space} is a triple $(\Omega, \Sigma, \PP)$, where $\Omega$ is a set, $\Sigma$ is a $\sigma$-algebra of subsets of $\Omega$, and $\PP$ is a non-negative measure on $\Sigma$ with 
+$\PP(\Omega)=1$. In other words, $\Sigma$ is the set of all measurable sets of $\Omega$ under the probablity measure $\PP$. (A probability measure $\PP$ is a measure such that $\PP(\Omega)=1$.)
+\end{definition}
+
+A simple case of a probability space is where $\Omega$ is a set, $\Sigma$ is $2^{\Omega}$ - the power set of $\Omega$. The probability measure $\PP$ is the function $\PP: \Sigma \rightarrow[0,1]$ that assigns to each event in $\Sigma$ a probability, which is a number between 0 and 1, namely
+$$
+\PP(A)=\sum_{a \in A} P(\{a\}), A \subset \Omega .
+$$
+
+\begin{definition}
+A \emph{random variable} $X$ on $(\Omega, \Sigma, \PP)$ is a measurable function $X : \Omega \longrightarrow E$ from sample space $\Omega$ to a measurable space $E$. The probability that $X$ takes on some value $S \in E$ is given as: 
+$$
+\PP(X \in S) = \PP(\{\omega \in \Omega \mid X(\omega) \in S\})
+$$
+\end{definition}
+
+\begin{definition}
+Given a random variable $X$ with countably many possible outcomes $x_i$. Then the \emph{expectation of} $X$ is given as
+\[
+\EE(X) = \sum_{i = 1}^{\infty}x_i \PP(X = x_i) 
+\]
+\end{definition}
+
+\begin{theorem}[Markov's Inequality]\label{mi}
+Let $X \geq 0$ be a random variable, and $a > 0$, then
+\[
+\PP(X\geq a) \leq \frac{\EE(X)}{a}
+\]
+\end{theorem}
+
+
+
+\subsection{Random Graphs}
+
+Consider the vertex set $V = [n] = \{1,2, \ldots, n\}$. Then the maximum number of edges on $[n]$ is $\binom{n}{2}$, i.e. the complete graph $K_n$ on $[n]$ has $\binom{n}{2}$ edges. Let $\mathscr{G}_{n,m}$ be the family of all labelled graphs on $[n]$ with exactly $m$ edges, $0 \leq m \leq \binom{n}{2}$, so that $|\mathscr{G}_{n,m}| = \binom{\binom{n}{2}}{m}$. We assign to each graph $G$ in $\mathscr{G}_{n,m}$ the probability
+$$\mathbb{P}(G)=\mathbb{P}(G \in \mathscr{G}_{n,m})={\binom{\binom{n}{2}}{m}}^{-1}$$
+\newline
+We call this graph $G$ the \emph{uniform random graph} - since the possibility of picking each graph in $\mathscr{G}_{n,m}$ is equally likely - and denote it by $G_{n,m}$.
+\newline 
+\\
+The second graph model $\mathscr{G}_{n,p}$ is the family of all graphs $G$ on $[n]$ where each of the possible $\binom{n}{2}$ edges is included independently with the fixed probability $p$, 
+ $0 \leq p \leq 1$. Hence, if $G$ is a graph in $\mathscr{G}_{n,p}$ with $[n]$ vertices and it has $m$ edges, $0 \leq m \leq \binom{n}{2}$, we assign to $G$ the probability
+$$\mathbb{P}(G)=\mathbb{P}(G \in \mathscr{G}_{n,p})=p^m(1-p)^{\binom{n}{2}-m}$$
+\\
+We call this graph the \emph{binomial random graph} and denote it by $G_{n,p}$.
+\newline 
+\\
+With the definitions above, the random graph models $\mathscr{G}_{n,m}$  and $\mathscr{G}_{n,p}$ form a probability space under the assosciated probability functions $\PP$.
+Upon observing the descriptions of these random graph models, there seems to be a close relationship between the two models. Indeed we have: 
+
+\begin{lemma}\label{equiv}
+Given that a random graph $G_{n,p}$ has $m$ edges, then it is equally likely to be one of the $\binom{\binom{n}{2}}{m}$ choices of graphs that have $m$ edges.
+\end{lemma}
+
+\begin{proof}
+Let $H$ be a labelled graph with $m$ edges. We will denote the size of the edge set of $H$ by $|H| = m$. Now, since $$\left\{{G}_{n, p}=H\right\} \subseteq\left\{\left|G_{n, p}\right|=m\right\}$$
+we have 
+\newline
+$$
+\begin{aligned}\label{eqe}
+\mathbb{P}\left({G}_{n, p}=H|| G_{n, p} \mid=m\right) & =\frac{\mathbb{P}\left({G}_{n, p}=H,\left|G_{n, p}\right|=m\right)}{\mathbb{P}\left(\left|E_{n, p}\right|=m\right)} \\
+& =\frac{\mathbb{P}\left({G}_{n, p}=H\right)}{\mathbb{P}\left(\left|G_{n, p}\right|=m\right)} \\
+& =\frac{p^m(1-p)^{\binom{n}{2}-m}}{\binom{\binom{n}{2}}{m} p^m(1-p)^{\binom{n}{2}-m}} \\
+& ={\binom{\binom{n}{2}}{m}}^{-1}
+\end{aligned}
+$$
+\end{proof}
+
+
+This just says that $G_{n,p}$ shares the same probability distribution as $G_{n,m}$ when conditioned on the event that $G_{n,p}$ has $m$ edges. Thus, for large $n$, we can expect $G_{n,p}$ and $G_{n,m}$ to behave similarly, given that the fixed $m$ in $G_{n,m}$ is equal to or close to the expected number of edges of $G_{n,p}$, i.e. $m = \binom{n}{2}p \approx \frac{n^2 p}{2}$.
+\newline
+
+We imagine our random graphs evoluting on the initially isolated vertex set $V = [n]$. As we increase the values $m$ and $p$, respectively, our graphs successively amass more edges. A very natural question and a central point of interest in the theory of random graphs is, at what stage in this evolution a particular interesting property emerges in our random graph? 
+\newline 
+\\
+Write $2^{\binom{n}{2}}$ for the set of all labeled graphs on the vertex set $[n]$. A \emph{graph property} $\cF$ is defined to be a subset of $2^{\binom{n}{2}}$ having the property $\cF$. The statement that `the graph $G$ has a property $\cF$' is then equivalent to `$G \in \cF$'. For example, all planar graphs, all connected graphs, graphs containing a triangle, graphs containing a Hamiltonian cycle are specific `graph properties' (on $n$ vertices) and for instance, the graph property of being connected is the set $\left\{G \in 2^{\binom{n}{2}}\colon G\textrm{ is connected}\right\}.$
+\newline
+\\
+We call $\cF$ a \emph{monotone increasing property} if whenever $G \in \cF$ and $G \subseteq H$ then $G \in \cF$ as well. This means adding an edge $e$ to a graph $G$ does not destroy the property, since $G \subseteq G + e \in \cF$. Thus the property of containment of a specific subgraph, such as a triangle, or a Hamiltonian cycle, is monotone increasing. We say a monotone increasing property $\cF$ is \emph{non-trivial} if the empty graph $\emptyset \notin \cF$ and the complete graph $K_n \in \cF$. Hereon, we will consider only non-trivial properties.
+\newline 
+\\
+To see the behavior of a `typical' element acquiring a graph property, we will work in a sequence of probability spaces (graph models). Let $\sG_n$ be a random graph model of order $n$, (could be $\sG_n = \sG_{n,m}$ or $\sG_n = \sG_{n,p}$). We say that a \emph{typical element in $\sG_n$ has a property $\cF$} when for any random graph $G_n \in \sG_n, \ \PP(G_n \in \cF) \rightarrow 1$ as $n \rightarrow \infty$. When this happens, we also say that \emph{almost every} (a.e) graph in $\sG_n$ has property $\cF$. 
+\newline 
+\\
+We have the following fact about the probabilities of containment of a property $\cF$:
+\begin{theorem}\label{couplingtheorem}
+Let $\cF$ be a monotone increasing property, and $0 \leq m_1 < m_2 \leq \binom{n}{2}$ and $0 \leq p_1<p_2 \leq 1$. Then 
+$$\mathbb{P}\left({G}_{n, p_1} \in \cF \right) \leq \mathbb{P}\left({G}_{n, p_2} \in \cF \right) \textrm{ and } \mathbb{P} \left({G}_{n, m_1} \in \cF \right) \leq \mathbb{P}\left({G}_{n, m_2} \in \cF \right)$$
+\end{theorem}
+
+\begin{proof}
+\begin{itemize}
+\item[(i)] We select the $m_1$ edges successively. If the random graph obtained from selecting only $m_1$ edges has the property $\cF$, then the random graph obtained from selecting $m_2$ will also have the property $\cF$.
+\item[(ii)] Let $p$ be such that $1-p_2=\left(1-p_1\right)\left(1-p\right)$, and pick independently $G_1 \in \sG_{n,p_1}$ and $G \in \sG_{n,p}$, and put $G_2=G_1 \cup G$. Then an edge is not included in the graph $G_2$ if it is not included in both $G_1$ and $G$. This means the \emph{failure} probability of an edge in $G_2$ is exactly $1-p_2=\left(1-p_1\right)\left(1-p\right)$. This implies exactly that $G_2 \in \sG_{n,p_2}$. Now $\cF$ monotone increasing implies that if $G_1$ has the property $\cF$, then $G_2$ also has it and so we are done. 
+\end{itemize}
+\end{proof}
+
+\subsection{Thresholds}
+
+Erd\H{o}s and R\'{e}nyi observed a very striking result that the appearance and disappearance of most monotone graph properties are rather ``abrupt": for a certain $m$ (or $p$) value, almost no $G_{n,m}$ $(\textrm{or } G_{n,p})$ has the property $\cF$, but being slightly above $m$ (or $p$) renders graphs $G_{n,m}$ $(\textrm{or } G_{n,p})$ that almost always have $\cF$. We formalize this by defining \emph{threshold functions}, or simply \emph{thresholds}.
+
+\begin{definition}
+Given a monotone increasing property $\cF$ in $G_{n,m}$ a function $m^*=m^*(n)$ is called a \emph{threshold function} for $\cF$ if
+$$
+\lim _{n \rightarrow \infty} \mathbb{P}\left({G}_{n, m} \in \cF \right)= \begin{cases}0 & \text { if } m / m^* \rightarrow 0, \\ 1 & \text { if } m / m^* \rightarrow \infty,\end{cases}
+$$
+as $n \rightarrow \infty$.
+\end{definition}
+
+We have a similar definition for the other model.
+
+\begin{definition}
+Given a monotone increasing property $\cF$ in $G_{n,p}$ a function $p^*=p^*(n)$ is called a \emph{threshold function} for $\cF$ if
+$$
+\lim _{n \rightarrow \infty} \mathbb{P}\left({G}_{n, p} \in \cF \right)= \begin{cases}0 & \text { if } p / p^* \rightarrow 0, \\ 1 & \text { if } p / p^* \rightarrow \infty,\end{cases}
+$$
+as $n \rightarrow \infty$.
+\end{definition}
+
+A huge amount of research is centered around finding these thresholds for various graph properties. An important result in the theory, shown by Bollab\'{a}s and Thomason \cite{tf}, says that every non-trivial monotone graph property has a threshold. Their results also show that $m^*(n)=\max \left\{l: \mathbb{P}(G_{n,l}\in \cF) \leq 1 / 2\right\}$ and $p^*(n)=\max \left\{q: \mathbb{P}(G_{n,q}\in \cF) \leq 1 / 2\right\}$ are respective thresholds for a property $\cF$ on $G_{n,m}$ and $G_{n,p}$. Clearly, threshold functions are not unique, but they are unique up to factors: if $m_1^*$ is a threshold of $\cF$, then $m_2^*$ is another threshold of $\cF$ iff $m_2^*=O\left(m_1^*\right)$ and $m_1^*=O\left(m_2^*\right)$. Following this, we shall talk about \emph{the} threshold of a property. 
+\newline 
+
+The \emph{Kahn-Kalai Conjecture} in substance provides bounds on thresholds of increasing graph properties. Although motivation of the subject arises from random graphs and their evolution, the setting of the conjecture is more general. Random graphs help to serve a more concrete picture in mind, but the definitions can be easily carried to a more general finite set $X$.
+
+\section{The Kahn-Kalai Conjecture}
+We have used \cite{ppkkc}, \cite{okkc}, and \cite{ffkkc} to build up to the statement of the main result of the paper. Most of the notation used closely follows that of the aforementioned papers.
+\newline
+
+In the setting of this result, it is irrelevant that we have graph properties and graph thresholds. We give analogous definitions to $G_{n,m}$ and $G_{n,p}$. 
+\newline
+\\
+Let $X$ be a finite set and $2^{X}$ the power set of $X$. Let $|X| = n$ where $n$ is large. For any integer $m$, we call any subset of $X$ of size $m$ an $m$\emph{-subset} of $X$, and we denote by $X_m$ a \emph{uniformly random} $m$-subset of $X$.
+\newline
+\\
+For $p \in [0,1]$, let $\mu_p$ be the product measure on $2^X$ given by ${\mu_p(A)=p^{|A|}(1-p)^{n-|A|}}$ for $A \subseteq X$. We denote by $X_p$ the \emph{random variable} whose distribution is $\mu_p$. In other words, $X_p$ is the random set obtained from $X$ when we include each element of $X$ independently with the probability $p$. 
+
+
+As before $\cF \in 2^X$ is an increasing property of subsets of $X$, meaning that if ${B \supseteq A \in \mathcal{F} \Rightarrow B \in \mathcal{F}}$. Then we have 
+$$\begin{aligned} \mu_p(\cF):=\sum_{A \in \cF} \mu_p(A) & =\sum_{A \in \cF} p^{|A|}(1-p)^{n-|A|} \\ 
+& =\sum_{A \in \cF} \mathbb{P}\left(X_p=A\right) \\ 
+& =\mathbb{P}\left(X_p \in \cF\right)\end{aligned}$$
+
+From Theorem ~\ref{couplingtheorem} it is easy to see that that $\mu_p(\cF) = \mathbb{P}\left(X_p \in \cF\right)$ is strictly increasing in $p$, and since it is also a polynomial in $p$, we have that there is unique $p$ for which $\mu_p(\cF) = 1/2$. Call this $p$ the \emph{threshold} $p_c(\cF)$ whose existence is ensured by the results in \cite{tf}.
+
+Recall since we are working in sequences of probability spaces, $p_c = p_c(n)$ is a threshold function means that if $\cF_n$ are a sequence of monotone properties of $n$-sized sets $X$, $(n=1,2, \ldots)$, then
+$$
+\mu_{p(n)}\left(\mathcal{F}_n\right) \rightarrow \begin{cases}0 & \text { if } p(n) / p_c(n) \rightarrow 0 \\ 1 & \text { if } p(n) / p_c(n) \rightarrow \infty\end{cases}
+$$
+
+
+We note that equivalent definitions can be easily given on $m$ in the $X_m$ model, but we avoid stating them for now. 
+\newline
+
+Let  $\langle A \rangle:= \left\{B: B \supseteq A\right\}$. We say $\cG \subseteq 2^X$ is a \emph{cover} of $\cF$ (or \emph{covers} $\cF$) if 
+\begin{equation}\label{cover}
+\cF \subseteq \langle \cG \rangle := \bigcup_{S \in \cG} {\langle S \rangle}
+\end{equation}
+We have 
+\begin{equation}\label{trivial}
+\mu_{p}(\mathcal{F}) \leq \mu_{p}(\langle\mathcal{G}\rangle) = \sum_{S \in \langle\mathcal{G}\rangle}{\PP(S = X_p)} \leq  \sum_{S \in \cG}{\PP(S \subseteq X_p)}  = \sum_{S \in \mathcal{G}} p^{|S|} .
+\end{equation}
+where $\sum_{S \in \mathcal{G}} p^{|S|} = \mathbb{E}[\mid\{S \in \mathcal{G}$ : $\left.\left.S \subseteq X_{p}\right\} \mid\right]$. 
+\\
+
+For any cover $\cG$, we define the $p$\emph{-cost} of $\cG$ as $\operatorname{cost}_p(\cG) := \sum_{S \in \mathcal{G}} p^{|S|}$. We say the cover $\cG$ is $p$\emph{-cheap} (or just \emph{cheap}) if $\operatorname{cost}_p(\cG) \leq 1/2$. When a property $\cF$ has a $p$-cheap cover, we say $\cF$ is $p$\emph{-small}.
+\\
+
+Define the \emph{expectation-threshold} of a property $\cF$, $q(\cF)$, to be the maximum $p$ such that $\cF$ has a $p$-cheap cover. We have that $q = q(\cF)$ provides a lower bound, since (\ref{trivial}) implies $\mu_{q}(\cF) \leq 1/2$. 
+\\
+
+The question we are dealing with in our main result is about locating the threshold for our random variable $X_p$ to contain an increasing property $\cF$. Take, for example, the case where the increasing property $\cF$ is containment of a fixed subgraph $H$ in the usual random graph $G_{n,p}$. Earlier basic results \cite{okkc} show that the threshold for such an $\cF$ is obtained by observing the threshold for \emph{expectation of the number of copies of densest part of the subgraph $H$}. Roughly speaking, the definition of expectation-threshold that we provided above makes this notion of containing copies of densest parts of subgraphs a little better and encompasses more general cases.
+\newline 
+\\
+Given an increasing property $\cF$, consider the set of minimal elements of $\cF$ such that if $A$ and $B$ are minimal elements, then $A \not\subset B$ and $B \not\subset A$. Write $ \ell(\cF)$ for the size of the largest minimal element of $\cF$. Thus, we have acquired all the technology to state the main theorem of this paper.
+
+\begin{theorem}[The Kahn-Kalai Conjecture]\label{kkc}
+There is a universal constant $K>0$ such that for every finite $X$ and increasing property $\cF \subseteq 2^{X}$, 
+\[
+ p_{c}(\mathcal{F}) \leq K q(\mathcal{F}) \log \ell(\mathcal{F})
+\]
+\end{theorem}
+
+\textbf{Notation.} In the following text all logarithms are base 2, unless specified otherwise.
+\newline
+
+To attack this problem better, Park and Pham \cite{ppkkc} reformulate this problem into a one which consists the $X_m$ model instead of the $X_p$ model, enabling the brilliant use of covers that we have defined above. 
+
+Denote by $\cH$ a \emph{hypergraph} on $X$ which is a collection of subsets of $X$. $\cH$ is called $\ell$-bounded if each of its elements, or $edges$, have size at most $\ell$. We can apply our earlier definitions to $\cH$, so that we have $\langle \cH \rangle = \bigcup_{S \in \cH} {\langle S \rangle}$, and we allow $\cH$ to be $p$-cheap in the same sense. 
+
+\begin{theorem}\label{reformulation}
+There is a universal constant $L>0$ such that if $\cH$ is any $\ell$-bounded hypergraph on X and $p>q(\cF)$, then with $m = (Lp\log{\ell})|X|$
+\begin{equation}\label{the}
+\PP\left(X_{ m} \in \langle \cH \rangle \right) = 1-o_{\ell \rightarrow \infty}(1)
+\end{equation}
+\end{theorem}
+
+In what follows, with high probability (w.h.p.) refers to the probability tending to $1$ as $\ell \rightarrow \infty$.
+\newline 
+
+Theorem \ref{reformulation} is a stronger result in that if we adjust the $\ell$ in (\ref{the}) we get Theorem \ref{kkc} as an implication. In the original statement (Theorem \ref{kkc}) it is enough to show that the containment probaility is at least $1/2$, but in the reformulation (Theorem \ref{reformulation}) the containment probability tends to $1$ as $\ell$ tends to $\infty$. We will now show this implication.
+\begin{proof}[Theorem \ref{reformulation} $\implies$ Theorem \ref{kkc}]
+Let $\cF$ be as in Theorem \ref{kkc}. We assume Theorem \ref{reformulation}, and let $q > q(\cF)$. We want to show that with $p = (Kq\log{\ell})|X|$, the probability of $X_{p}$ having property $\cF$ is at least 1/2, i.e. $\PP(X_{p} \in \cF) > 1/2.$
+Note that if we take $\cH$ in Theorem \ref{reformulation} to be the set of minimal elements of $\cF$, then $\langle \cH \rangle = \cF$. Since $\ell(\cF)$ is the size of the largest element of $\cF$, we have that $\cH$ is $\ell(\cF)$-bounded. Being above the expectation threshold i.e. $q> q(\cF)$, $\cF$ is not $p$-small and so $\cH$ is not $p$-small (see argument below (\ref{cc})), upon which the implication in Theorem \ref{reformulation} tells us that $\PP\left(X_{ m} \in \langle \cH \rangle \right) = 1-o_{\ell \rightarrow \infty}(1)$. Let $\ell = C\ell(\cF)$ where $C$ is a universal constant such that $\ell$ adjusts the containment probability to be at least $3/4$, i.e. $\PP\left(X_{ m} \in \langle \cH \rangle \right) \geq 3/4$.
+
+Let $m=(L q \log \ell)|X|$ and $p^{\prime}=2 m /|X|$. Here we make the distinction that $X_{p^{\prime}} \sim \mu_{p^{\prime}}$ and $X_m$ is the uniform random $m$-subset of $X$.
+$$
+\begin{aligned}
+\mathbb{P}\left(X_{p^{\prime}} \in\langle\mathcal{H}\rangle\right) & =\sum_{k=0}^n \mathbb{P}\left(X_{p^{\prime}} \in\langle\mathcal{H}\rangle\mid| X_{p^{\prime}} |=k\right) \mathbb{P}\left(|X_{p^{\prime}}|=k\right) \\
+&=\sum_{k=0}^n \mathbb{P}\left(X_k \in\langle\mathcal{H}\rangle\right) \mathbb{P}\left(|X_{p^{\prime}}|=k\right) \\
+& \geq\mathbb{P}\left(X_m \in\langle\mathcal{H}\rangle\right) \mathbb{P}\left(|X_{p^{\prime}}| \geq m\right)
+\end{aligned}
+$$
+where the second equality follows from Lemma (\ref{equiv}), and $X_k$ is the uniform random $k$-subset of $X$. We have 
+\[
+\mathbb{P}\left(X_{p^{\prime}} \in\langle\mathcal{H}\rangle\right) \geq \mathbb{P}\left(\left|X_{p^{\prime}}\right| \geq m\right) \mathbb{P}\left(X_{m} \in\langle\mathcal{H}\rangle\right) \geq(3 / 4) \mathbb{P}\left(\left|X_{p^{\prime}}\right| \geq m\right)>1 / 2
+\]
+Note that $\cH$ is not $q$-cheap means $\operatorname{cost}_q(\cH)>1 / 2$ which implies $|X| q>1 / 2$ and hence $m>(L \log{\ell}) / 2$, i.e. $m$ is somewhat large, and so $\mathbb{P}\left(|X_{p^{\prime}}| \geq m\right) \approx 1$. This gives us the last inequality. Now taking $K$ such that $p\geq p^{\prime}$ ensures the containment probability of at least $1/2$, so we are done. 
+\end{proof}
+
+We prove the reformulated statement of the Kahn-Kalai Conjecture, that is Theorem \ref{reformulation}.
+
+\section{Proof of Theorem \ref{reformulation}}
+
+Our main aim is to present the proof given by Pham and Park \cite{ppkkc} in an expository manner. Hence, we follow their argument. Firstly, we provide an informal overview of the strategy employed. 
+
+Observe that if we take $\cH$ to be the set of minimal elements of $\cF$, then any cover of $\cH$ will also cover $\cF$. This follows, because given a cover $\cG$ of $\cH$, then we have $\forall S \in \cH, \ \exists G \in \cG$ such that $G\subseteq S$, and 
+\begin{equation}\label{cc}
+\cF \subseteq \langle \cH \rangle=\bigcup_{S \in \cH}\langle S\rangle \subseteq \bigcup_{G \in \cG}\langle G\rangle=\langle \cG \rangle
+\end{equation}
+Thus, if $\cF$ does not admit a cheap cover, then $\cH$ does not admit one either, where cheap (or $p$-cheap) means $\operatorname{cost}_p(\text{cover}) < 1/2$.
+
+Note that the implication of Theorem \ref{reformulation} says that $\PP\left(X_{ m} \in \langle \cH \rangle \right) = 1-o_{\ell \rightarrow \infty}(1)$, where $\PP\left(X_{ m} \in \langle \cH \rangle \right) = \PP\left(X_{ m} \supseteq S \in \langle \cH \rangle \right)$. Therefore, we would be successful in proving this theorem, if we can show $X_m$ captures some $S \in \cH$ w.h.p.  Even if this is our main goal, we cannot hope to sprinkle a random set $X_{ m}$ and hope to capture in it some $S$ in $\cH$, since we have very minimal assumptions on $\cH$. So we embark on an alternative route where we try to cover $\cH$ and see if that could somehow lead us to capturing some element $S \in \cH$.
+
+To begin with, we run an randomized algorithm where we iteratively try to form a cover of the hypergraph $\cH = \cH_0$. At each step in the iteration, we renew the hypergraph from the previous one and construct a cover of the new one, so we have a sequence of hypergraphs: 
+$$
+\cH_{0} \longrightarrow \cH_{1} \longrightarrow \cH_{2} \longrightarrow \cdots
+$$
+At $i$-th step, we are working on $\cH_{i-1}$ produced at $(i-1)$-th step. Here we select a sub-graph $\cG_{i}$ (\emph{good sets}) of $\cH_{i-1}$ which admit a cheap cover $\cU_{i}$ and let $\cH_{i} \subseteq \cH_{i-1} \setminus \cG_{i}$ be the next updated hypergraph. So, in the $(i+1)$-th step, we now want to find the \emph{good sets} of $\cH_{i}$ and so on. A crucial point here is that since $\cH_{i} \subseteq \cH_{i-1} \setminus \cG_{i}$, the cover we wish to construct of $\cH_{i}$ should also cover the ``leftovers" $\cH_{i-1} \setminus \cG_{i} $ from the previous hypergraph, 
+\[
+\cH_{i-1}\setminus \cG_{i} \subseteq \langle \cH_{i} \rangle
+\]
+Hence, at each step we reduce the task of finding a cover of $\cH_{i-1} \setminus \cG_{i}$ to just finding a cover of ``smaller" $\cH_i$.
+
+Due to lack of assumptions on the hypergraph $\cH$, we allow two outcomes at the termination of the algorithm. The first one is exactly the implication of the Theorem \ref{reformulation}, that we contain in a random set $X_{ m}$ some $S \in \cH$ w.h.p. We show that if the first outcome fails, then we are forced into the second outcome which says that $\bigcup_{i}\cU_i$ cheaply covers $\cH$. But the fact $\cH$ is not $p$-small in the assumption of our theorem contradicts the second outcome, pulling us back into the first outcome w.h.p. This is what we want, hence Theorem \ref{reformulation} follows. 
+
+We first show how to construct the cover $\cU$ in Section \ref{constructing}. For now, we will consider a single iteraion where we throw a random set $W$ of size $Lp|X|$ in $\cH$, for some $p \in [0,1]$. Then, we look at the outcome of all the iterations combined and their termination in Section \ref{iteration}.
+
+\subsection{Constructing the cover}\label{constructing}
+Let $|X| = n $,  $L\geq 1024$, $\cH$ an $\ell$-bounded hypergraph. Denote by $\binom{X}{w}$ the collection of $w$-subsets of X, where $w:=Lpn$. Let $W$ be uniformly chosen from $\binom{X}{w}$.
+
+We consider the proceeding of a single iteration. Suppose in this iteration we start with the hypergraph $\cH$. We sprinkle the set $W$ inside $\cH$; for all $S \in \cH$ and $W$, we look at $S \cup W$. Consider all the members $S^{\prime}$ of $S \cup W$ and for each one call the set $S^{\prime} \setminus W$ an $(S,W)$\emph{-fragment}. Given $S$ and $W$, for the $(S,W)$-fragment whose size is the minimum out of all the subsets of $S \cup W$, define $T = T(S,W)$ to be that $(S,W)$-fragment. Thus, $|T(S,W)| = |S^{\prime} \setminus W|$, where $S^{\prime}$ is the subset of $S \cup W$ that forms the minimum $(S,W)$-fragment. 
+
+For a given $W$, let $\cG = \cG(W)$, (the \emph{good set}) be the collection of $S$ in $\cH$ such that the size of the their minimum fragment with $W$ is ``large"; we can state this more formally, 
+\[
+\cG(W):=\{S \in \cH: |T(S, W)| \geq .9 \ell\} 
+\]
+and $\cG(W)$ is covered by $\cU(W)$, which is defined as:
+\[
+\cU(W):=\{T(S, W): S \in \mathcal{G}(W)\}
+\]
+The motivation behind such definitions is that if we use large $T(S,W)$'s, i.e the minimum fragments, to form a cover, then this cover would be cheap, as we shall see shortly. Observe that $\cU(W)$ does in fact cover $\cG(W)$ from the way both objects are defined.
+
+Since the leftover edges $\cH \setminus \cG(W)$ are not necessarily covered by $\cU(W)$, since $\cU(W)$ is mainly designed to cover only $\cG(W)$, we use the leftovers to construct the next hypergraph such that
+\begin{equation}\label{nexthypergraph}
+\cH^{\prime} = \cH^{\prime}(W) = \left\{T(S,W): S \in \cH \setminus \cG(W) \right\}
+\end{equation}
+This new hypergraph $\cH^{\prime}$ contains edges of size at most $0.9\ell$. As we highlighted in the proof overview, we have the crucial property that $\mathcal{H} \setminus \mathcal{G}(W) \subseteq\left\langle\mathcal{H}^{\prime}\right\rangle$, and so a cover of $\cH^{\prime}$ also covers $\mathcal{H} \setminus \mathcal{G}$. 
+
+Note that we uptil now, in the construction of this cover, we have not made any assumptions on $p$. Thus, for $W$ such that $|W| = Lpn$, different sizes of $W$ give different sizes of intersections with $S \in \cH$ and hence, different good sets $\cG(W)$ and different covers $\cU(W)$. The covers $\cU(W)$ can be both cheap or expensive, but the following result shows that for a ``typical'' $W$, the random set that we sprinkle, the cover we obtain is cheap.
+
+\begin{lemma}
+For $W$ uniformly chosen from $\binom{X}{w}$, then with a probability of at least $ 1 - L^{-0.1\ell}$,
+$$
+\sum_{U \in \mathcal{U}(W)} p^{|U|}<L^{-.5 \ell} .
+$$
+\end{lemma}
+With probability of at least $ 1 - L^{-0.1\ell}$ means that if $A := \left( \sum_{U \in \mathcal{U}(W)} p^{|U|}<L^{-.5 \ell}\right) $, then $$ \PP(A<L^{-.5 \ell} ) \geq 1 - L^{-0.1\ell}.$$ 
+Note that this statement follows from
+\begin{equation}\label{exp}
+\mathbb{E}(A)<L^{-.6 \ell} \quad (\text{expectation is over the choice of }W)
+\end{equation}
+since then we have by Markov's Inequality (Theorem \ref{mi}):
+$$
+\mathbb{P}\left(A \geq L^{-0.5\ell}\right) \leq \frac{\mathbb{E}(A)}{L^{-0.5\ell}}<L^{-0.1\ell}. 
+$$
+Thus, it is enough to prove \ref{exp}. Observe that \ref{exp} is equivalent to 
+\begin{equation}\label{over}
+\sum_{W \in \binom{X}{w}} \sum_{U \in \mathcal{U}(W)} p^{|U|}<\binom{n}{w} L^{-.6 \ell}
+\end{equation}
+Therefore, we shall prove \ref{over}.
+\begin{proof}[Proof of \ref{over}] 
+Given $W$ and $m \geq 0.9\ell$, define 
+$$
+\mathcal{G}_{m}(W):=\{S \in \mathcal{H}: |T(S, W)|=m\}
+$$
+and 
+$$
+\mathcal{U}_{m}(W):=\left\{T(S, W): S \in \mathcal{G}_{m}(W)\right\}
+$$
+so that sets $U \in \cU_m(W)$ have size at most $m$. Thus, $p^{|U|} = p^{m}$ and the expression $\sum_{W \in \binom{X}{w}} \sum_{U \in \mathcal{U}(W)} p^{|U|}$ is equal to $p^{m}$ multiplied by
+\begin{equation}\label{choices}
+ \left|\left\{(W, T(S, W)): W \in\binom{X}{w}, S \in \mathcal{H}, \text { and } |T(S, W)|=m\right\} \right|
+\end{equation}
+Hence what is left is to bound the number of choices of $W$ and $T = T(S,W)$ in \ref{choices}, such that $T$ is ``large'' enough to be specified cheaply. We put the bound in the following steps. 
+\begin{itemize}
+\item[Step 1.] Firstly we count the number of ways we can pick $W$ and $T$, independent of the cost of specifying them. Hence, we pick $Z:=W \cup T$. We have $W$ and $T$ are always disjoint by construction, so that $|Z|=w+m$. Thus, the number of ways we can pick $Z$ is bounded above by: 
+$$
+\binom{n}{w+m}=\binom{n}{w} \cdot \prod_{j=1}^{m} \frac{n-w-j}{w+j} \leq \binom{n}{w}(L p)^{-m}
+$$
+
+
+\item[Step 2.] Now pick any edge of $\cH$, $\hat{S} \subseteq Z$. Note that this always possible, since by the definition of minimum fragment $T(S,W) = S^{\prime}\setminus W$ for some $S^{\prime}$ that makes the size of $T(S,W)$ the minimum and so, $(S^{\prime} \setminus W) \cup W = Z  \implies  Z \supseteq S^{\prime}$. Hence, the choice of $\hat{S}$ comes for free. But, more importantly $T \subseteq \hat{S}$ by the minimality of $T$. Now $|\hat{S}|\leq \ell$ implies that we can specify $T$ as a subset of $S$ in $2^{\ell}$ ways. 
+
+Since the specifying the pairs $(W,T)$ is determined by fixing choices of $Z$ and $T$, we have the following bound on our sum
+\[
+\sum_{W \in\binom{X}{w}} \sum_{U \in \mathcal{U}_{m}(W)} p^{|U|} \leq p^{m}\binom{n}{w}(L p)^{-m} 2^{\ell}=\binom{n}{w} L^{-m} 2^{\ell}
+\]
+Lastly for $L\geq1024$, if we sum over all the $m\geq 0.9 \ell$, we have 
+\begin{equation}
+\sum_{m \geq .9 \ell}\binom{n}{w} L^{-m} 2^{\ell} \leq\binom{n}{w} L^{-.6 \ell}
+\end{equation}
+where the right hand side above is equal to that of the inequality in \ref{over}
+\end{itemize}
+\end{proof}
+
+We restate that we have just shown that a cover produced from a typical choice of $W_i$ (in a single iteration) is cheap, and hence if we sum up the costs of each cover $\cU_i$ over all the iterations, the union of the covers $\bigcup_i \cU_i$ is still cheap.  Recall that the random set $W_i$ that we used in the iteration had size $Lp|X|$. Eventually, we want to have thrown a random $m$-set of $X$ ($m=(Lp\log{\ell})|X|$) that would capture some $S \in \cH$. So if $W$ is a disjoint union of all the $W_i$'s, i.e. $W = \bigsqcup_{i} W_{i}$, we wish that the number of total iterations is $C\log{\ell}$ (where $C$ is a universal constant), so that $|W(=X_m)| = (Lp\log{\ell})|X|$. ($L$ is again a universal constant, it is irrelevant that we use the same constant from earlier.) Now, we show this formally in the following section.
+
+\subsection{Iteration}\label{iteration}
+We have as before $|X|= n, L \geq 1024, \text{ and } \ell \rightarrow \infty$. Recall that our starting hypergraph $\cH_0$ is $\ell$-bounded, the next hypergraph $\cH_1$ is $0.9\ell$-bounded, and $\cH_i$ is $0.9^{i}\ell$-bounded. Note that a hypergraph $\cH_k$ contains an \emph{empty} edge if $|0.9^k \ell| < 1$. Hence, let $i = 1,2, \cdots, \lfloor{\log_{0.9}{1/\ell}+1}\rfloor =: \gamma$, and $\ell_i = 0.9^i\ell$, so that 
+\begin{equation}\label{f}
+0 < \ell_{\gamma} < 1.
+\end{equation}
+In order to form disjoint sets $W_i$, let $X = X_0$ and choose $W_i$ uniformly from $\binom{X_{i-1}}{w_i}$, where $X_i = X_{i-1}\setminus W_i$ and $w_{i}=L_{i} p n$ with, 
+$$
+L_{i}=\left\{\begin{array}{lll}
+L & \text { if } & i<\gamma-\sqrt{\log _{.9}(1 / \ell)} \\
+L \sqrt{\log \ell} & \text { if } & \gamma-\sqrt{\log _{.9}(1 / \ell)} \leq i \leq \gamma
+\end{array}\right.
+$$
+These definitions render $W = \bigsqcup_{i}^{\gamma} W_{i}$ such that it is a uniformly random subset of $X$ of size $(K L p \log \ell) n$, where $K \leq K^{\prime}$ for some absolute constant $K^{\prime}>0$. This follows upon after carrying out some calculations which show that there is an absolute constant $k>0$ such that
+\begin{equation}\label{expp}
+\ell_{i}>\exp (k \sqrt{\log \ell}) \quad \forall i<\gamma-\sqrt{\log _{.9}(1 / \ell)}
+\end{equation}
+Now, we apply the procedure described in the previous section (\ref{constructing}) to each iteraton. Doing so produces a sequence $\left\{\cH_k \right\}$, for which $\cH_0 = \cH$ is the starting hypergraph and 
+\begin{equation}
+\cH_i = \cH_{i-1}^{\prime}
+\end{equation}
+where we use the definition of the next hypergraph $\cH^{\prime}$ as in \ref{nexthypergraph}.
+
+For each $i$, $\cH_i$ is $\ell_i$-bounded, and for each $W_i$, we construct the corresponding \emph{good set} $\cG_i = \cG_i(W_i)$ and the \emph{cover} $\cU_i = \cU_i(W_i)$ of $\cG_i $. We highlight that $\cG_i$ is a sub-graph of $\cH_{i-1}$. For $i = 1, 2, \cdots, \gamma$, we call $W_i$ \emph{successful} if it admits a cheap cover $\cU_i $ of $\cG_i $, that is 
+\begin{equation}\label{cheapcover}
+\begin{gathered}
+\sum_{U \in \mathcal{U}\left(W_{i}\right)} p^{|U|}<L_{i}^{-.5 \ell_{i}} ; \text { and } \\
+\mathcal{H}_{i} \text { does not contain } \emptyset .
+\end{gathered}
+\end{equation}
+\begin{remark}
+Note that the second condition for $W_i$ to be successful is essential in our theory. Considering, if $\emptyset$ is contained in our next hypergraph $\mathcal{H}_{i}$, our algorithm would try to find its cover, but $\emptyset$ has only itself as its cover, for which $\operatorname{cost}_p(\emptyset) = p^{0} = 1$ is too expensive for us to afford. Moreover, if we leave it as a \emph{bad set} (the set which does not admit a cheap cover), it will be thrown in next hypergraph and so on, leaving the algorithm interminable. 
+\end{remark}
+
+We terminate our process once we have 
+\[
+\cG_i = \cH_{i-1}\setminus \{\emptyset\}
+\]
+This means that we have to terminate, as soon as we have covered everything in $\cH_{i-1}$, except for some empty sets. Strictly speaking, $\cH_i \subseteq \{\emptyset \}$ for some $i (=: i_\text{max} \leq \gamma)$. If our host hypergraph $\cH_{i-1}$ contains some empty edges, that is because they were reduced to size 0 by choosing minimum fragments and only allowing $90\%$ of the previous edge sizes. Note that if, for instance, there are some other \emph{bad} sets (not covered yet) that are not empty, in our current hypergraph, we put them in the next hypergraph and continue the iterations. However, this is exactly the situation we want to avoid if we want $W_i$ to be successful.
+
+We say the algorithm \emph{terminates successfully}, if $W_i$'s are successful, for all $i \leq i_\text{max}$.
+\begin{proposition} \label{termination}
+If our process terminates successfully, then the union of the (partial) covers, $\bigcup_{i\leq i_\text{max}}\cU(W_i)$, covers $\cH$
+\end{proposition}
+
+\begin{proof}
+Suppose $\cU$ does not fully cover $\cH$. Then there is some $ S \in \cH$ such that $\cU$ does not cover $S$. Consider the evolution of $S$ in our iteration: $S = S_0, S_1, \cdots, S_i \in \cH_i$, where $S_i := T(S_{i-1},W_i)$. As mentioned in the argument above, $S$ not being covered by $\cU$ implies that $S$ was a bad set, which eventually was reduced to size 0 (since in each iteration either a set is reduced in size, or it is covered). Thus, there exists some $i_0$ for which $S_{i_0} = \emptyset$. Since, $S_{i_0}$ lives in $\cH_{i_0}$, this means $W_{i_0}$ is not successful, which is a contradiction to successful termination of the process.
+\end{proof}
+
+Suppose we arrive at a successful termination, then the cost of our cover $\cU$ is
+\[
+\operatorname{cost}_p(\cU)=
+\sum_{U \in \mathcal{U}} p^{|U|} \stackrel{(\ref{cheapcover})}{<} \sum_{i \leq i_{\max }} L_{i}^{-.5 \ell_{i}} \stackrel{(\ref{expp})}{\leq} 2 L^{-.5 \exp (k \sqrt{\log \ell)}}+O\left((L \sqrt{\log \ell})^{-k^{\prime}}\right) \stackrel{(\star)}{\leq} 1 / 2,
+\]
+where $k^{\prime}>0$ is some constant, and the inequality in ( $\star$ ) holds for $\ell$ sufficiently large. Hence, we have shown the cover $\cU$ is $p$-cheap. Now in the premises of Theorem \ref{reformulation}, we have that $\cH$ is not $p$-small, which means $\cH$ does not admit any $p$-cheap cover. Thus, the event that the $p$-cheap cover $\cU$ that we constructed in our randomized algorithm covers $\cH$ happens with low probability. Therefore, we will now show that the other case, that $W \in \langle \cH \rangle$, happens with high probability. First we have the following proposition,
+
+\begin{proposition}\label{in}
+If $\cH_i$ contains $\emptyset$ for some $i$, then $W \in \cH$
+\end{proposition}
+
+\begin{proof}
+Recall that $W \in \cH$ is equivalent to saying $W \supseteq S \in \cH$, that $W$ contains some $S$ in $\cH$. Suppose there exists some $j$ for which $\cH_j$ contains $\emptyset$. From the way we constructed $\{\cH_i\}$, we have $\emptyset = S_j, S_{j-1}, \cdots, S_1, S_o := S$ with $S_i \in \cH_i$ and $S_i = S_{i-1} \setminus W_i$. (Recall  $T(S_{i-1},W_i) = S_{i-1} \setminus W_i$ and taking the union $W_i ~\cup~ T(S_{i-1},W_i)$ recovers exactly the edge $S_{i-1} \in \cH_{i-1}$.) Thus, we have $S_{i}=S \setminus \left(\bigcup_{k \leq i} W_{k}\right)$ for $i \in \{1,2, \cdots, j\}$, which gives  $S \subseteq \bigcup_{k \leq j} W_{k} = W$.
+\end{proof}
+
+We will show Theorem \ref{reformulation} by contradiction. If we suppose that the implication in the statement of Theorem \ref{reformulation} is not true, then we will show that the event that all $W_i$'s are successful happens with a positive probability. Since all successful $W_i$'s mean we can find a $p$-cheap cover of $\cH$, this gives the contradiction. 
+\newline
+\\
+\textbf{Notation.}
+\[
+\begin{gathered}
+\bigwedge_{i=1}^n A_i=A_1 \wedge A_2 \wedge \cdots \wedge A_n
+ \text{ means ``all events } A_i \text{ happen''}\\
+\bigvee_{i=1}^n A_i=A_1 \wedge A_2 \wedge \cdots \wedge A_n
+ \text{ means ``some event } A_i \text{ happens''}.
+\end{gathered}
+\]
+
+Let $\eta_i$ denote the event that for $W_i$, $\sum_{U \in \mathcal{U}\left(W_{i}\right)} p^{|U|} \geq L_{i}^{-.5 \ell_{i}}$ (Note that this is the event where the first condition for $W_i$ to be successful fails in (\ref{cheapcover})). Due to Proposition \ref{in}, we then have
+$$
+\begin{aligned}
+\mathbb{P}\left(\bigvee_{i \leq i_{\max }}\left\{W_{i} \text { not successful }\right\}\right) & \leq \sum_{i \leq i_{\max }} \mathbb{P}\left(\mathcal{\eta}_{i}\right)+\mathbb{P}(W \in\langle\mathcal{H}\rangle) \\
+& \leq \sum_{i \leq \gamma} L_{i}^{-.1 \ell_{i}}+\mathbb{P}(W \in\langle\mathcal{H}\rangle)
+\end{aligned}
+$$
+Further, we have
+$$
+\begin{aligned}\label{final}
+& \sum_{i \leq \gamma} L_{i}^{-.1 \ell_{i}}=\sum_{i<\gamma-\sqrt{\log _{.9}(1 / \ell)}} L_{i}^{-.1 \ell_{i}}+\sum_{i \geq \gamma-\sqrt{\log _{.9}(1 / \ell)}}^{\gamma} L_{i}^{-.1 \ell_{i}} \\
+& \stackrel{(\ref{f}),(\ref{expp})}{\leq} 2 L^{-.1 \exp (k \sqrt{\log \ell})}+O\left((L \sqrt{\log \ell})^{-k^{\prime \prime}}\right)=o_{\ell}(1)
+\end{aligned}
+$$
+where $k^{\prime \prime}$ is some positive constant. Now, suppose the implication \ref{the} of our main theorem fails. This implies that there exists a fixed $\varepsilon>0$ such that
+$$
+\mathbb{P}(W \in\langle\mathcal{H}\rangle) \leq 1-\varepsilon,
+$$
+This together with the inequality \ref{final} implies 
+\[
+\mathbb{P}\left(\bigvee_{i \leq i_{\max }}\left\{W_{i} \text { not successful }\right\}\right) < 1,
+\]
+which in turn implies 
+\[
+\mathbb{P}\left(\bigwedge_{i \leq i_{\max }}\left\{W_{i} \text { successful }\right\}\right) > 0.
+\]
+This concludes the argument, and Theorem \ref{reformulation} is proved.
+
+\section{Applications}
+
+When Kahn and Kalai first conjectured this theorem in \cite{okkc}, they remarked: “It would probably be more sensible to conjecture
+that it is not true”; the reason for such skepticism being the strength of consequences of the conjecture. Since these consequences are out of the scope of this paper, we refer the reader to the original paper, in which the conjecture first came up \cite{okkc}, and \cite{ffkkc} which discusses the significance of the conjecture in light of its consequences for special \emph{hard} problems. Lastly, the proof discussed here also simplifies that of the main lemma in \cite{ffkkc}.
+
+\pagebreak
+
+\begin{thebibliography}{99}
+
+\bibitem{er} \textsc{P. Erd\H{o}s and A. R\`{e}nyi}, On random graphs, \textit{I, Publ. Math.}, \textbf{6}(1959), 290-297.
+
+\bibitem{ppkkc} \textsc{J. Park and H. T. Pham}, A proof of the kahn-kalai conjecture, \textit{arXiv preprint arXiv:2203.17207.}
+
+\bibitem{okkc} \textsc{J. Kahn and G. Kalai}, Thresholds and expectation thresholds, \textit{Combin. Probab. Comput.}, \textbf{16}(2007), no. 3, 495–502.
+
+\bibitem{tf} \textsc{B. Bollob\'as and A. Thomason}, Threshold functions, \textit{Combinatorica}, \textbf{7}(1987), 35-38.
+
+\bibitem{mbk} \textsc{A. Frieze and M. Karo\'{n}ski}, \textit{Introduction to random graphs}, Cambridge University Press, 2016.
+
+\bibitem{sbk} \textsc{B. Bollob\'as}, \textit{Random Graphs. 2nd ed.}, Cambridge University Press, 2001.
+
+\bibitem{ffkkc} \textsc{K. Frankston, J. Kahn, B. Narayanan, and J. Park}, Thresholds versus fractional expectation-thresholds, \textit{Ann. of Math. (2)}, \textbf{194}(2021), no. 2, 475–495.
+
+\bibitem{app} \textsc{R. Alweiss, L. Shachar, K. Wu, and J. Zhang}, Improved bounds for the sunflower lemma, \textit{Ann. of Math. (2)}, \textbf{194}(2021), no. 3, 795–815
+
+\end{thebibliography}
+
+
+\end{document}
